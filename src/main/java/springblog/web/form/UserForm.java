@@ -18,8 +18,6 @@ import springblog.bl.dto.UserDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserForm {
-	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	var ps = passwordEncoder.
 	private int id;
 
 	@NotBlank(message = "Please Enter Name")
