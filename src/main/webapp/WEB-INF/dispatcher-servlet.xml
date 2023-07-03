@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- Context Annotation and Configuration -->
+	<context:annotation-config />
+	<context:component-scan
+		base-package="springblog" />
+
+	<!-- MVC, Resource, Property Configuration -->
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/resources/**"
+		location="/resources/" />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Tiles Configuration -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="order" value="0" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.tiles3.TilesView" />
+	</bean>
+
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/layouts/layouts.xml</value>
+				<value>/WEB-INF/layouts/post-view.xml</value>
+				<value>/WEB-INF/layouts/user-view.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- View Configuration -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1" />
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- JDBC Configuration -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<!-- Hibernate Configuration -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+		<property name="packagesToScan"
+			value="springblog.persistence.entity" />
+	</bean>
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- Security -->
+
+	<bean id="myUserDetailsService"
+		class="springblog.security.RoleDetailsService" />
+
+	<bean id="customAuthenticationSuccessHandler"
+		class="springblog.security.CustomAuthenticationSuccessHandler" />
+
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<security:authentication-manager>
+		<security:authentication-provider >
+			<security:user-service>
+				<security:user name="admin@gmail.com" authorities="Admin" password="$2a$10$C90YyF1rw7uYhCxvtNYpz.QiO8HaDnQXoc3wFEq2tMhi6cW6Ua0eO"/>
+			</security:user-service>		
+		</security:authentication-provider>
+		<security:authentication-provider
+			user-service-ref="myUserDetailsService">
+			<security:password-encoder
+				ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+
+	<security:http>
+	    <security:intercept-url pattern="/users/**" access="hasAnyAuthority('Admin')" />
+	    <security:intercept-url pattern="/posts/**" access="hasAnyAuthority('User')" />
+	    <security:intercept-url pattern="/login/**" access="permitAll" />
+	    <security:intercept-url pattern="/**" access="permitAll" />
+
+	    <security:form-login login-page="/login"
+	        login-processing-url="/login" username-parameter="username"
+	        password-parameter="password"
+	        authentication-success-handler-ref="customAuthenticationSuccessHandler" />
+	
+	    <security:logout logout-url="/logout"
+	        logout-success-url="/login" invalidate-session="true" />
+	    <security:csrf disabled="true" />
+
+	</security:http>
+</beans>
