@@ -18,6 +18,8 @@ import springblog.bl.dto.UserDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserForm {
+	
+	
 	private int id;
 
 	@NotBlank(message = "Please Enter Name")
