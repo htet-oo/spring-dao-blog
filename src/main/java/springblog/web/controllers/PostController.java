@@ -22,8 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import springblog.bl.dto.PostDTO;
 import springblog.bl.dto.UserDTO;
-import springblog.services.post.PostService;
-import springblog.services.user.UserService;
+import springblog.bl.services.post.PostService;
+import springblog.bl.services.user.UserService;
 import springblog.web.form.PostForm;
 
 @Controller
@@ -40,8 +40,6 @@ public class PostController {
 		ModelAndView mv = new ModelAndView("postListView");
 		mv.addObject("posts", postDtoList);
 		
-		String email = authentication.getName();
-		mv.addObject("account",email);
 		return mv;
 	}
 

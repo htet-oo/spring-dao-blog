@@ -82,7 +82,14 @@ public class UserDaoImpl implements UserDao {
 		stringBuf.append(" WHERE email =:email");
 		return getSession().createQuery(stringBuf.toString(),User.class).setParameter("email", email).getSingleResult();
 	}
-
+	
+	@Override
+	public User findResetPasswordToken(String resetPasswordToken) {
+		StringBuffer stringBuf = new StringBuffer(QUERY);
+		stringBuf.append(" WHERE reset_password_token =: resetPasswordToken");
+		return getSession().createQuery(stringBuf.toString(),User.class).setParameter("resetPasswordToken", resetPasswordToken).getSingleResult();
+	}
+	
 	private Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}

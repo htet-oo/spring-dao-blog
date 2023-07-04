@@ -15,15 +15,14 @@
 	<!-- Security -->
 
 	<bean id="myUserDetailsService"
-		class="springblog.security.RoleDetailsService" />
+		class="springblog.bl.services.auth.RoleDetailsService" />
 
 	<bean id="customAuthenticationSuccessHandler"
-		class="springblog.security.CustomAuthenticationSuccessHandler" />
-
-
-	<bean id="passwordEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-
+		class="springblog.bl.services.auth.CustomAuthenticationSuccessHandler" />
+		
+	<bean id="passwordEncoder" 
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+		
 	<security:authentication-manager>
 		<security:authentication-provider >
 			<security:user-service>
@@ -54,4 +53,5 @@
 	    <security:csrf disabled="true" />
 
 	</security:http>
+
 </beans>

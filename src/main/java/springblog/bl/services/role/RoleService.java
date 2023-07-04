@@ -1,4 +1,4 @@
-package springblog.services.role;
+package springblog.bl.services.role;
 
 import java.util.List;
 

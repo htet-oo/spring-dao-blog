@@ -20,11 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 import net.bytebuddy.matcher.ModifierMatcher.Mode;
 import springblog.bl.dto.RoleDTO;
 import springblog.bl.dto.UserDTO;
+import springblog.bl.services.role.RoleService;
+import springblog.bl.services.user.UserService;
 import springblog.persistence.dao.post.PostDao;
 import springblog.persistence.entity.Post;
 import springblog.persistence.entity.Role;
-import springblog.services.role.RoleService;
-import springblog.services.user.UserService;
 import springblog.web.form.UserForm;
 
 @Controller
@@ -43,11 +43,7 @@ public class UserController {
 		List<UserDTO> userDtoList = this.userService.getAllUsers();
 		mv.addObject("users", userDtoList);
 		
-		String email = authentication.getName();
-		mv.addObject("account",email);
-		
 		var role = authentication.getAuthorities();
-		System.out.println(role);
 		mv.addObject("role",role);
 		return mv;
 	}
@@ -118,6 +114,5 @@ public class UserController {
 		String headerValue = "attachment;filename=list.xls";
 		response.setHeader(headerKey, headerValue);
 		userService.generateExcel(response);
-		
 	}
 }

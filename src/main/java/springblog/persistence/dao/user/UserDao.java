@@ -20,4 +20,6 @@ public interface UserDao {
 	void editUser(User user);
 	
 	User findByEmail(String email);
+	
+	User findResetPasswordToken(String resetPasswordToken);
 }

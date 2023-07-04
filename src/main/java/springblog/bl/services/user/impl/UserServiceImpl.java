@@ -1,9 +1,8 @@
-package springblog.services.user.impl;
+package springblog.bl.services.user.impl;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -15,14 +14,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import springblog.bl.dto.PostDTO;
 import springblog.bl.dto.UserDTO;
+import springblog.bl.services.user.UserService;
+import springblog.exception.CustomerNotFoundException;
 import springblog.persistence.dao.role.RoleDao;
 import springblog.persistence.dao.user.UserDao;
-import springblog.persistence.entity.Role;
 import springblog.persistence.entity.User;
-import springblog.services.user.UserService;
 import springblog.web.form.UserForm;
 
 @Service
@@ -34,7 +31,6 @@ public class UserServiceImpl implements UserService {
 	private RoleDao roleDao;
 	
 	@Autowired
-	
 	private PasswordEncoder passwordEncoder;
 
 	@Override
@@ -115,6 +111,34 @@ public class UserServiceImpl implements UserService {
 		workbook.close();
 		ops.close();
 	}
+	
+	@Override
+	public void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException {
+		User user = userDao.findByEmail(email);
+		
+		if (user != null) {
+			user.setResetPasswordToken(token);
+			userDao.editUser(user);
+		}else {
+			throw new CustomerNotFoundException("Could not find any user with " + email);
+		}
+	}
+
+	@Override
+	public User get(String resetPasswordToken) {
+		return userDao.findResetPasswordToken(resetPasswordToken);
+	}
+
+	@Override
+	public void updatePassword(User user, String newPassword) {
+		user.setPassword(passwordEncoder.encode(newPassword));
+		user.setResetPasswordToken(null);
+		userDao.editUser(user);
+	}
+	
+	
+	
+	
 
 	
 

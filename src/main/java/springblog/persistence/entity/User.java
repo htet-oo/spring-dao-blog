@@ -63,6 +63,9 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE,CascadeType.MERGE})
 	private Set<Post> post;
 	
+	@Column(name = "reset_password_token",length = 45)
+	private String resetPasswordToken;
+	
 	public User() {
     	super();
         this.roles = new HashSet<>();
