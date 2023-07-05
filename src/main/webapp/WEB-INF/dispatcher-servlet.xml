@@ -27,6 +27,7 @@
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/jdbc.properties</value>
+				<value>/WEB-INF/mail.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -134,5 +135,34 @@
 	    <security:csrf disabled="true" />
 
 	</security:http>
+	
+	<!-- mail config -->
+	<bean id="mailSender" 
+		 class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		 <property name="host" value="${mail.smtp.host}"></property>
+		 <property name="port" value="${mail.smtp.port}"></property>
+		 <property name="username" value="${mail.smtp.username}"></property>
+		 <property name="password" value="${mail.smtp.password}"></property>
+		 <property name="javaMailProperties">
+		 	<props>
+		 		<prop key="mail.smtp.auth">true</prop>
+		 		<prop key="mail.transport.protocol">smtp</prop>
+		 		<prop key="mail.smtp.starttls.enable">true</prop>
+		 		<prop key="mail.smtp.starttls.required">true</prop>
+		 		<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+		 	</props>
+		 </property>
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </beans>

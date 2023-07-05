@@ -12,21 +12,24 @@
 	<div class="container py-5">
 		<div class="row justify-content-center">
 			<div class="card px-5 py-5 shadow" style="width: 50%;">
-				 <h2 class="text-center">FORGET PASSWORD</h2>
+				 <h2 class="text-center">RESET PASSWORD</h2>
 				 
 				 <!-- Form -->
-				 <c:url value="/forget_password" var="forgetPassword"></c:url>
-				  <form action="${forgetPassword}" method="post">
+				 <c:url value="/reset_password" var="resetPassword"></c:url>
+				  <form action="${resetPassword}" method="post">
+				  	<input type="hidden" name = "token" value="${token}"/>
 				  	<div class="mb-3">
-						 <div class="text-center">
-						  	<p>We will be sending a reset password link  to your email.</p>
-						 </div>
 						 <div>
 						 	<p>
-						 		<input type="email" name="email" class="form-control" placeholder="Enter your E-mail" required="required" autofocus="autofocus">
+						 		<input type="password" name="password" class="form-control" placeholder="Enter your new Password" required="required" autofocus="autofocus">
 						 	</p>
+						 	
+						 	<p>
+						 		<input type="password" name="confirmPassword" class="form-control" placeholder="Confirm your new  Password" required="required">
+						 	</p>
+						 	
 						 	<p class="text-center">
-						 		<input type="submit" value="Send" class="btn btn-primary ps-4 pe-4">
+						 		<input type="submit" value="Change Password" class="btn btn-primary ps-4 pe-4">
 						 	</p>
 						 	
 						 </div>
@@ -39,6 +42,5 @@
 	</div>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	
 </body>
 </html>

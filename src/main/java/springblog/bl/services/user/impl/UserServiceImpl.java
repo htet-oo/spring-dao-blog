@@ -118,6 +118,7 @@ public class UserServiceImpl implements UserService {
 		
 		if (user != null) {
 			user.setResetPasswordToken(token);
+			System.out.println("this is " + user.getResetPasswordToken());
 			userDao.editUser(user);
 		}else {
 			throw new CustomerNotFoundException("Could not find any user with " + email);
