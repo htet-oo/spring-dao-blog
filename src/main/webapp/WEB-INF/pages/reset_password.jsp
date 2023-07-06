@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,28 +16,32 @@
 				 <h2 class="text-center">RESET PASSWORD</h2>
 				 
 				 <!-- Form -->
-				 <c:url value="/reset_password" var="resetPassword"></c:url>
-				  <form action="${resetPassword}" method="post">
-				  	<input type="hidden" name = "token" value="${token}"/>
+				 <c:url value="/reset_password" var="resetPassword"></c:url>				  
+				  <form:form method="POST" action="${resetPassword}" modelAttribute="resetPasswordForm">
+				  	<form:hidden path="token" value="${token}"/>
 				  	<div class="mb-3">
-						 <div>
-						 	<p>
-						 		<input type="password" name="password" class="form-control" placeholder="Enter your new Password" required="required" autofocus="autofocus">
-						 	</p>
-						 	
-						 	<p>
-						 		<input type="password" name="confirmPassword" class="form-control" placeholder="Confirm your new  Password" required="required">
-						 	</p>
-						 	
-						 	<p class="text-center">
-						 		<input type="submit" value="Change Password" class="btn btn-primary ps-4 pe-4">
-						 	</p>
-						 	
-						 </div>
-						 
+				  		<form:label path="email">Your Email</form:label>
+				  		<form:input path="email" class="form-control" readonly="readonly"/>
 				  	</div>
-
-				  </form>
+				  	<div class="mb-3">
+                        <c:if test="${not empty requestScope['org.springframework.validation.BindingResult.resetPasswordForm']}">
+                            <c:set var="bindingResult" value="${requestScope['org.springframework.validation.BindingResult.resetPasswordForm']}"/>
+                            <c:if test="${bindingResult.hasFieldErrors('confirmPassword')}">
+                                <p style="color: red;">Password and Confirm Password must match</p>
+                            </c:if>
+                        </c:if>
+				  		<form:label path="password" class="mb-2">New Password</form:label>
+				  		<form:input path="password" id="password" class="form-control" placeholder="Enter your new Password" required="required" autofocus="autofocus"/>
+				  	</div>
+				  	<div class="mb-3">
+				  		<span id="validPassword" style="color: red;"></span>
+				  		<form:label path="confirmPassword" class="mb-2">Confirm Password</form:label>
+				  		<form:input path="confirmPassword" id="confirmPassword" class="form-control" placeholder="Enter your Confirm Password" required="required"/>
+				  	</div>
+				  	<div class="text-center">
+				  		<button type="submit" class="btn btn-primary">Change</button>
+				  	</div>
+				  </form:form>
 			</div>
 		</div>
 	</div>

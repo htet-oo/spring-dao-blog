@@ -4,8 +4,6 @@ import java.util.List;
 
 import springblog.bl.dto.PostDTO;
 import springblog.persistence.entity.Post;
-import springblog.persistence.entity.User;
-import springblog.web.form.PostForm;
 
 public interface PostDao {
 	List<Post> getAllPosts();

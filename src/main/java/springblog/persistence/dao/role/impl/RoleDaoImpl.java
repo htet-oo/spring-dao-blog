@@ -26,6 +26,7 @@ public class RoleDaoImpl implements RoleDao {
 	@Override
 	public List<Role> getAllRoles() {
 		StringBuffer stringBuf = new StringBuffer(QUERY);
+		@SuppressWarnings("unchecked")
 		Query<Role> query = getSession().createQuery(stringBuf.toString());
 		return query.list();
 	}

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,31 +15,25 @@
 			<div class="card px-5 py-5 shadow" style="width: 50%;">
 				 <h2 class="text-center">FORGET PASSWORD</h2>
 				 
-				 <!-- Form -->
 				 <c:url value="/forget_password" var="forgetPassword"></c:url>
-				  <form action="${forgetPassword}" method="post">
+				  <form:form method="POST" action="${forgetPassword}" modelAttribute="forgetPasswordForm">
 				  	<div class="mb-3">
-						 <div class="text-center">
-						  	<p>We will be sending a reset password link  to your email.</p>
-						 </div>
-						 <div>
-						 	<p>
-						 		<input type="email" name="email" class="form-control" placeholder="Enter your E-mail" required="required" autofocus="autofocus">
-						 	</p>
-						 	<p class="text-center">
-						 		<input type="submit" value="Send" class="btn btn-primary ps-4 pe-4">
-						 	</p>
-						 	
-						 </div>
-						 
+				  		<p class="text-center">
+				  			We will sent reset password link to your email.
+				  		</p>
+				  		<div class="mb-2">
+				  			<form:errors path="email"></form:errors>
+				  			<form:input path="email" class="form-control" placeholder="Enter Your login Email"/>
+				  		</div>
+				  		<div class="text-center">
+				  			<button type="submit" class="btn btn-primary">Send</button>
+				  		</div>
 				  	</div>
-
-				  </form>
+				  </form:form>
 			</div>
 		</div>
 	</div>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	
 </body>
 </html>

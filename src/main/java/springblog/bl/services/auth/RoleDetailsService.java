@@ -16,20 +16,12 @@ public class RoleDetailsService implements UserDetailsService {
 	@Autowired
 	private UserDao userDao;
 	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userDao.findByEmail(username);
-		System.out.println(user.getEmail());
 		UserDTO userDto = new UserDTO(user);
-		if(user == null) {
-			throw new UsernameNotFoundException("Rewrite Username or Password");
-		}
-		
-		return org.springframework.security.core.userdetails.User.builder()
-				.username(userDto.getEmail())
-				.password(userDto.getPassword())
-				.authorities(userDto.getRoles())
-				.build();
+		return userDto;
 	}
 
 }

@@ -6,8 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import springblog.bl.dto.UserDTO;
-import springblog.exception.CustomerNotFoundException;
-import springblog.persistence.entity.Role;
 import springblog.persistence.entity.User;
 import springblog.web.form.UserForm;
 
@@ -26,7 +24,7 @@ public interface UserService {
 	
 	void generateExcel(HttpServletResponse response) throws IOException;
 	
-	void updateResetPasswordToken(String token,String email) throws CustomerNotFoundException;
+	void updateResetPasswordToken(String token,String email);
 	
 	User get(String resetPasswordToken);
 	

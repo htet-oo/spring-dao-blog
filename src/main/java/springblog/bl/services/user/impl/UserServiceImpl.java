@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springblog.bl.dto.UserDTO;
 import springblog.bl.services.user.UserService;
-import springblog.exception.CustomerNotFoundException;
 import springblog.persistence.dao.role.RoleDao;
 import springblog.persistence.dao.user.UserDao;
 import springblog.persistence.entity.User;
@@ -113,16 +112,10 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void updateResetPasswordToken(String token, String email) throws CustomerNotFoundException {
+	public void updateResetPasswordToken(String token, String email){
 		User user = userDao.findByEmail(email);
-		
-		if (user != null) {
-			user.setResetPasswordToken(token);
-			System.out.println("this is " + user.getResetPasswordToken());
-			userDao.editUser(user);
-		}else {
-			throw new CustomerNotFoundException("Could not find any user with " + email);
-		}
+		user.setResetPasswordToken(token);
+		userDao.editUser(user);
 	}
 
 	@Override

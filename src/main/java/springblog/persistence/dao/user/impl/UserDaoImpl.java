@@ -1,9 +1,5 @@
 package springblog.persistence.dao.user.impl;
-
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
@@ -11,13 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import springblog.bl.dto.UserDTO;
-import springblog.persistence.dao.post.PostDao;
 import springblog.persistence.dao.user.UserDao;
-import springblog.persistence.entity.Post;
 import springblog.persistence.entity.User;
-import springblog.web.form.UserForm;
 
 @Repository
 @Transactional
@@ -28,12 +19,11 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	@Autowired
-	private PostDao postDao;
 
 	@Override
 	public List<User> getAllUsers() {
 		StringBuffer stringBuf = new StringBuffer(QUERY);
+		@SuppressWarnings("unchecked")
 		Query<User> query = getSession().createQuery(stringBuf.toString());
 		return query.list();
 	}
@@ -54,6 +44,7 @@ public class UserDaoImpl implements UserDao {
 		StringBuffer stringBuf = new StringBuffer(QUERY);
 		stringBuf.append(" AS U");
 		stringBuf.append(" WHERE U.name LIKE :keyword OR U.email LIKE :keyword");
+		@SuppressWarnings("unchecked")
 		Query<User> query = getSession().createQuery(stringBuf.toString());
 		query.setParameter("keyword", "%" + keyword + "%"); 
 		return query.list();
@@ -81,7 +72,10 @@ public class UserDaoImpl implements UserDao {
 	public User findByEmail(String email) {
 		StringBuffer stringBuf = new StringBuffer(QUERY);
 		stringBuf.append(" WHERE email =:email");
-		return getSession().createQuery(stringBuf.toString(),User.class).setParameter("email", email).getSingleResult();
+		@SuppressWarnings("unchecked")
+		List<User> user = getSession().createQuery(stringBuf.toString()).setParameter("email", email).list();
+//		return getSession().createQuery(stringBuf.toString(),User.class).setParameter("email", email).getSingleResult();
+		return (!user.isEmpty()) ? user.get(0) : null;
 	}
 	
 	@Override

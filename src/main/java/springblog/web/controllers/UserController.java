@@ -7,8 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,15 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import net.bytebuddy.matcher.ModifierMatcher.Mode;
 import springblog.bl.dto.RoleDTO;
 import springblog.bl.dto.UserDTO;
 import springblog.bl.services.role.RoleService;
 import springblog.bl.services.user.UserService;
 import springblog.persistence.dao.post.PostDao;
-import springblog.persistence.entity.Post;
-import springblog.persistence.entity.Role;
 import springblog.web.form.UserForm;
 
 @Controller

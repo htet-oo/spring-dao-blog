@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import springblog.persistence.entity.Role;
-import springblog.persistence.entity.User;
 
 @Getter
 @Setter

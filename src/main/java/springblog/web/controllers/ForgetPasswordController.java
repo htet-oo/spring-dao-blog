@@ -4,26 +4,25 @@ import java.io.UnsupportedEncodingException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import net.bytebuddy.utility.RandomString;
 import springblog.bl.services.user.UserService;
-import springblog.exception.CustomerNotFoundException;
-import springblog.mail.Utility;
 import springblog.persistence.entity.User;
+import springblog.web.form.ForgetPasswordForm;
+import springblog.web.form.ResetPasswordForm;
 
 @Controller
 public class ForgetPasswordController {
@@ -34,27 +33,28 @@ public class ForgetPasswordController {
 	private JavaMailSender mailSender;
 	
 	@RequestMapping("/forget_password")
-	public String forgetPassword() {
-		return "/forget_password";
+	public ModelAndView forgetPassword() {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("forgetPasswordForm", new ForgetPasswordForm());
+		return mv;
 	}
 	
 	@PostMapping("/forget_password")
-	public String processForgetPasswordForm(HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException {
-		String email = request.getParameter("email");
-		String token = RandomString.make(45);
-		try {
-			userService.updateResetPasswordToken(token, email);
-			String resetPasswordLink = Utility.getSitUrl(request) + "/reset_password?token=" + token;
-			sendEmail(email,resetPasswordLink);
-			model.addAttribute("message", "we have sent a reset password link to your email");
-		} catch (CustomerNotFoundException e) {
-			model.addAttribute("error",e.getMessage());
-		} catch(UnsupportedEncodingException | MessagingException e) {
-			model.addAttribute("error","Error while sending mail");
+	public String processForgetPasswordForm(@ModelAttribute("forgetPasswordForm") @Valid ForgetPasswordForm forgetPasswordForm,BindingResult result) throws UnsupportedEncodingException, MessagingException{
+		if (result.hasErrors()) {
+			return "/forget_password";
 		}
+		String email = forgetPasswordForm.getEmail();
+		String token = RandomString.make(45);
+		userService.updateResetPasswordToken(token, email);
+	    String resetPasswordLink = ServletUriComponentsBuilder.fromCurrentContextPath()
+	            .path("/reset_password")
+	            .queryParam("token", token)
+	            .toUriString();
+		sendEmail(email,resetPasswordLink);
 		return "/forget_password";
 	}
-
+	
 	private void sendEmail(String email, String resetPasswordLink) throws UnsupportedEncodingException, MessagingException {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -72,24 +72,37 @@ public class ForgetPasswordController {
 	}
 	
 	@GetMapping("/reset_password")
-	public String resetPasswordForm(@RequestParam String token,Model model){
+	public ModelAndView resetPasswordForm(@RequestParam String token) {
+		ModelAndView mv = new ModelAndView();
 		User user = userService.get(token);
-		if(user == null) {
-			model.addAttribute("message", "Invalid Token");
-			return "message";
-		}
-		model.addAttribute("token",token);
-		return "reset_password";
+		String mail = user.getEmail();
+		ResetPasswordForm resetPasswordForm = new ResetPasswordForm();
+		resetPasswordForm.setEmail(mail);
+		mv.addObject("resetPasswordForm", resetPasswordForm);
+		mv.addObject("token",token);
+		mv.addObject("email", mail);
+		return mv;
 	}
 	
 	@PostMapping("/reset_password")
-	public void processResetPassword(HttpServletRequest request,Model model) {
-		String token = request.getParameter("token");
-		String password = request.getParameter("password");
+	public String processResetPassword(@ModelAttribute("resetPasswordForm") @Valid ResetPasswordForm resetPasswordForm,BindingResult result) {
+		ModelAndView mv = new ModelAndView();
+		String token = resetPasswordForm.getToken();
+		String password = resetPasswordForm.getPassword();
+		String confirmPassword = resetPasswordForm.getConfirmPassword();
 		User user = userService.get(token);
+	    if (!password.equals(confirmPassword)) {
+	        result.rejectValue("confirmPassword", "password.mismatch", "Password and Confirm Password must match");
+	    }
+	    if (result.hasErrors()) {
+	        mv.addObject("token", token);
+	        mv.addObject("email", resetPasswordForm.getEmail());
+	        return "/reset_password";
+		}
 		if(user != null) {
 			userService.updatePassword(user, password);
 		}
+		return "/login";
 	}
 
 }

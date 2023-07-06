@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import springblog.bl.dto.PostDTO;
 import springblog.persistence.dao.post.PostDao;
 import springblog.persistence.entity.Post;
-import springblog.persistence.entity.User;
 
 @Repository
 @Transactional
@@ -102,6 +101,7 @@ public class PostDaoImpl implements PostDao {
 	public Post findByUserId(int id) {
 		StringBuffer stringBuf = new StringBuffer(QUERY);
 		stringBuf.append(" WHERE user_id = :id");
+		@SuppressWarnings("unchecked")
 		Query<Post> query = getSession().createQuery(stringBuf.toString());
 		query.setParameter("id", id);
 		return query.getSingleResult();

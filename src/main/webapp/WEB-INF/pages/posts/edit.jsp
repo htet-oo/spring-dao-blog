@@ -8,7 +8,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-</script>
 </head>
 <body>
 	<div class="container py-5">
