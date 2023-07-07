@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -62,6 +63,10 @@ public class User {
 	
 	@Column(name = "reset_password_token",length = 45)
 	private String resetPasswordToken;
+	
+	@Lob
+	@Column(name = "image_data", columnDefinition = "LONGBLOB")
+    private byte[] imageData;
 	
 	public User() {
     	super();

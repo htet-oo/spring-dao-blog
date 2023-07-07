@@ -154,9 +154,11 @@
 		 </property>
 	</bean>
 	
+	<!-- image upload config -->
 	
-	
-	
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
 	
 	
 	

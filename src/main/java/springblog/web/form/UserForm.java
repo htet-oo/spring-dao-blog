@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,8 @@ public class UserForm {
 	private int roleId;
 	
 	private List<String> roles;
+	
+	private MultipartFile image;
 
 	public UserForm(UserDTO userDto) {
 		this.id = userDto.getId();

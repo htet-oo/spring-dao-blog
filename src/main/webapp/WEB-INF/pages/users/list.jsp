@@ -27,6 +27,7 @@
 		<div class="table-responsive py-5">
 			<table class="table table-bordered table-striped">
 				<tr>
+					<th>Image</th>
 					<th>Name</th>
 					<th>Email</th>
 					<th>Join Date</th>
@@ -34,6 +35,9 @@
 				</tr>
 				<c:forEach items="${users}" var="user">
 					<tr>
+						<td>
+							<img alt="use_image" src="data:image/png;base64,${user.imageData}" width="100px" height="100px">
+						</td>
 						<td>${user.name}</td>
 						<td>${user.email}</td>
 						<td>${user.created_at}</td>

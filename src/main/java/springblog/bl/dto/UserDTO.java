@@ -1,5 +1,6 @@
 package springblog.bl.dto;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserDTO implements UserDetails {
 	private String password;
 	private Date created_at;
 	private List<SimpleGrantedAuthority> roles;
+	private String imageData;
 
 	public UserDTO(User user) {
 		this.id = user.getId();
@@ -36,6 +38,10 @@ public class UserDTO implements UserDetails {
 		this.roles = user.getRoles().stream().map(role -> {
 			return new SimpleGrantedAuthority(role.getName());
 		}).toList();
+		
+		byte[] imageDataBytes = user.getImageData();
+        String base64Image = Base64.getEncoder().encodeToString(imageDataBytes);
+        this.imageData = base64Image;
 	}
 
 	@Override

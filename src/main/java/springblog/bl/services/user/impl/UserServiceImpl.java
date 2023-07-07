@@ -49,6 +49,11 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(userForm.getPassword()));
 		user.setCreated_at(new Date());
 		user.getRoles().add(this.roleDao.findById(userForm.getRoleId()));
+		try {
+			user.setImageData(userForm.getImage().getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		userDao.saveUser(user);
 	}
 

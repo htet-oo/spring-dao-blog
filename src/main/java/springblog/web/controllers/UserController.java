@@ -1,5 +1,6 @@
 package springblog.web.controllers;
 
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -57,8 +58,13 @@ public class UserController {
 		ModelAndView mv = new ModelAndView();
 		if(result.hasErrors()) {
 			mv.setViewName("userCreateView");
+			System.out.println(result.getAllErrors());
 			return mv;
 		}
+		System.out.println("this is filename" + userForm.getImage().getOriginalFilename());
+		System.out.println("this is filename" + userForm.getImage().getSize());
+		System.out.println("this is filename" + userForm.getImage().getName());
+		System.out.println("this is filename" + userForm.getImage().getContentType());
 		userService.saveUser(userForm);
 		mv.setViewName("redirect:/users/list");
 		return mv;
