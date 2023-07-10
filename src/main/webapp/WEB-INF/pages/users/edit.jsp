@@ -12,7 +12,7 @@
 	<div class="container py-5">
 		<h3>User Create</h3>
 		<c:url value="/users/edit/save" var="editDb"></c:url>
-		<form:form method="POST" action="${editDb}" modelAttribute="editUser">
+		<form:form method="POST" action="${editDb}" modelAttribute="editUser" enctype="multipart/form-data">
 			<form:hidden path="id" />
 			<div class="row">
 				<div class="col">
@@ -42,6 +42,12 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="col-5 mb-3">
+				<form:label path="image" cssClass="form-label">Image</form:label>
+				<form:input path="image" class="form-control" type="file" placeholder = "Select your image"/>
+			</div>
+			
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form:form>
 	</div>

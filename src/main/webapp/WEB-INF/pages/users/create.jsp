@@ -44,7 +44,7 @@
 			
 			<div class="col-5 mb-3">
 				<form:label path="image" cssClass="form-label">Image</form:label>
-				<form:input path="image" class="form-control" type="file" placeholder = "Select your  image"/>
+				<form:input path="image" class="form-control" type="file" placeholder = "Select your image"/>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form:form>

@@ -36,7 +36,7 @@
 				<c:forEach items="${users}" var="user">
 					<tr>
 						<td>
-							<img alt="use_image" src="data:image/png;base64,${user.imageData}" width="100px" height="100px">
+							<img alt="user_imge" src="${pageContext.request.contextPath}/resources/img/${user.imageName}">
 						</td>
 						<td>${user.name}</td>
 						<td>${user.email}</td>

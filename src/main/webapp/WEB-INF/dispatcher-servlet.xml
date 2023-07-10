@@ -20,7 +20,7 @@
 	<!-- MVC, Resource, Property Configuration -->
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/resources/**"
-		location="/resources/" />
+		location="/WEB-INF/resources/" />	
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -94,8 +94,35 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
-	<!-- Security -->
-
+	<!-- image upload config -->
+	
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+	
+	
+	<!-- Mail Configuration -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.smtp.host}" />
+		<property name="port" value="${mail.smtp.port}" />
+		<property name="username" value="${mail.smtp.username}" />
+		<property name="password" value="${mail.smtp.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.starttls.required">true</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	
+	
+	<!-- security -->
 	<bean id="myUserDetailsService"
 		class="springblog.bl.services.auth.RoleDetailsService" />
 
@@ -104,63 +131,6 @@
 		
 	<bean id="passwordEncoder" 
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-		
-	<security:authentication-manager>
-		<security:authentication-provider >
-			<security:user-service>
-				<security:user name="admin@gmail.com" authorities="Admin" password="$2a$10$C90YyF1rw7uYhCxvtNYpz.QiO8HaDnQXoc3wFEq2tMhi6cW6Ua0eO"/>
-			</security:user-service>		
-		</security:authentication-provider>
-		<security:authentication-provider
-			user-service-ref="myUserDetailsService">
-			<security:password-encoder
-				ref="passwordEncoder" />
-		</security:authentication-provider>
-	</security:authentication-manager>
-
-
-	<security:http>
-	    <security:intercept-url pattern="/users/**" access="hasAnyAuthority('Admin')" />
-	    <security:intercept-url pattern="/posts/**" access="hasAnyAuthority('User')" />
-	    <security:intercept-url pattern="/login/**" access="permitAll" />
-	    <security:intercept-url pattern="/**" access="permitAll" />
-
-	    <security:form-login login-page="/login"
-	        login-processing-url="/login" username-parameter="username"
-	        password-parameter="password"
-	        authentication-success-handler-ref="customAuthenticationSuccessHandler" />
-	
-	    <security:logout logout-url="/logout"
-	        logout-success-url="/login" invalidate-session="true" />
-	    <security:csrf disabled="true" />
-
-	</security:http>
-	
-	<!-- mail config -->
-	<bean id="mailSender" 
-		 class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		 <property name="host" value="${mail.smtp.host}"></property>
-		 <property name="port" value="${mail.smtp.port}"></property>
-		 <property name="username" value="${mail.smtp.username}"></property>
-		 <property name="password" value="${mail.smtp.password}"></property>
-		 <property name="javaMailProperties">
-		 	<props>
-		 		<prop key="mail.smtp.auth">true</prop>
-		 		<prop key="mail.transport.protocol">smtp</prop>
-		 		<prop key="mail.smtp.starttls.enable">true</prop>
-		 		<prop key="mail.smtp.starttls.required">true</prop>
-		 		<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
-		 	</props>
-		 </property>
-	</bean>
-	
-	<!-- image upload config -->
-	
-	<bean id="multipartResolver" 
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	</bean>
-	
-	
 	
 	
 	

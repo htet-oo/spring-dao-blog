@@ -64,9 +64,7 @@ public class User {
 	@Column(name = "reset_password_token",length = 45)
 	private String resetPasswordToken;
 	
-	@Lob
-	@Column(name = "image_data", columnDefinition = "LONGBLOB")
-    private byte[] imageData;
+	private String image;
 	
 	public User() {
     	super();

@@ -3,11 +3,10 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-	<display-name>CRUD</display-name>
 	<!-- Context Configuration -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>WEB-INF/dispatcher-servlet.xml</param-value>
+		<param-value>/WEB-INF/dispatcher-servlet.xml, /WEB-INF/security.xml</param-value>
 	</context-param>
 	
 	<!-- Character Encoding -->

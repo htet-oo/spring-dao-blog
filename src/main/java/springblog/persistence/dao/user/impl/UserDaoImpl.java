@@ -56,7 +56,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void editUser(User user) {
-		String sql = "UPDATE User SET name = :name, email = :email, password = :password, updated_at = :updatedAt, reset_password_token = :resetPasswordToken WHERE id = :id";
+		String sql = "UPDATE User SET name = :name, email = :email, password = :password, updated_at = :updatedAt, reset_password_token = :resetPasswordToken, image =:image WHERE id = :id";
 		Query<?> query = getSession().createQuery(sql);
 		query.setParameter("name", user.getName());
 		query.setParameter("email", user.getEmail());
@@ -64,6 +64,7 @@ public class UserDaoImpl implements UserDao {
 		query.setParameter("updatedAt", user.getUpdated_at());
 		query.setParameter("id", user.getId());
 		query.setParameter("resetPasswordToken", user.getResetPasswordToken());
+		query.setParameter("image", user.getImage());
 		query.executeUpdate();
 	}
 	

@@ -49,11 +49,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(userForm.getPassword()));
 		user.setCreated_at(new Date());
 		user.getRoles().add(this.roleDao.findById(userForm.getRoleId()));
-		try {
-			user.setImageData(userForm.getImage().getBytes());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		user.setImage(userForm.getImage().getOriginalFilename());
 		userDao.saveUser(user);
 	}
 
@@ -83,6 +79,7 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userForm.getEmail());
 		user.setPassword(userForm.getPassword());
 		user.setUpdated_at(new Date());
+		user.setImage(userForm.getImage().getOriginalFilename());
 		userDao.editUser(user);
 	}
 

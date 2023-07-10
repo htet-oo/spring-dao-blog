@@ -1,9 +1,13 @@
 package springblog.web.controllers;
 
-import java.util.Base64;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import springblog.bl.dto.RoleDTO;
 import springblog.bl.dto.UserDTO;
 import springblog.bl.services.role.RoleService;
@@ -33,7 +38,8 @@ public class UserController {
 	@Autowired PostDao postDao;
 
 	@RequestMapping("/users/list")
-	public ModelAndView getAllUsers(Authentication authentication) {
+	public ModelAndView getAllUsers(Authentication authentication, HttpSession session) {
+		System.out.println(session.getServletContext().getRealPath("/"));
 		ModelAndView mv = new ModelAndView("userListView");
 		List<UserDTO> userDtoList = this.userService.getAllUsers();
 		mv.addObject("users", userDtoList);
@@ -53,19 +59,25 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users/create/save", method = RequestMethod.POST)
-	public ModelAndView saveUser(@ModelAttribute("saveUser") @Valid UserForm userForm,
-								 BindingResult result) {
+	public ModelAndView saveUser(@ModelAttribute("saveUser") @Valid UserForm userForm,HttpServletRequest request,
+								 BindingResult result) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		if(result.hasErrors()) {
 			mv.setViewName("userCreateView");
-			System.out.println(result.getAllErrors());
 			return mv;
 		}
-		System.out.println("this is filename" + userForm.getImage().getOriginalFilename());
-		System.out.println("this is filename" + userForm.getImage().getSize());
-		System.out.println("this is filename" + userForm.getImage().getName());
-		System.out.println("this is filename" + userForm.getImage().getContentType());
+		byte[] bytes = userForm.getImage().getBytes();
+		String path = request.getServletContext().getRealPath("/")+"WEB-INF"+File.separator+"resources"+File.separator+"img"+File.separator+userForm.getImage().getOriginalFilename();
+		System.out.println(path);
+		try {
+			FileOutputStream fos = new FileOutputStream(path);
+			fos.write(bytes);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		userService.saveUser(userForm);
+		mv.addObject("path",path);
 		mv.setViewName("redirect:/users/list");
 		return mv;
 	}
