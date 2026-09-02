@@ -254,9 +254,9 @@ The images can then be displayed in the user list.
 
 ![Login](GitPhoto/Login.png)
 
-### User List
+### Admin User List
 
-![User List](GitPhoto/UserList.png)
+![Admin User List](GitPhoto/UserList.png)
 
 ### User Home
 
