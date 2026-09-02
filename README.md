@@ -1,87 +1,107 @@
+# Spring DAO Blog
 
-# Spring Blog Management System
+A web-based blog application developed using Java and the Spring Framework.
 
-A web-based blog management application developed using Java and the Spring Framework.
-
-This project implements user management, authentication and authorization,
-blog post management, password recovery with email delivery, form validation,
-database persistence, profile image upload, and Excel export.
+This project implements a layered architecture with Spring MVC, Spring Security, Hibernate, MySQL, JSP, and JSTL. It provides user management, authentication, blog post management, role-based access control, password recovery, validation, image upload, search, and Excel export functionality.
 
 ## Features
 
-### User Management
-- User registration
-- User editing
-- User deletion
-- User search
-- Role management
-- Profile image upload
-- Automatic image storage
+### Authentication & Authorization
 
-### Authentication & Security
-- User login
+- User login and logout
 - Spring Security authentication
 - Role-based authorization
 - Admin and User roles
-- Logout
-- Password recovery
-- Password reset
-- Email-based password recovery
-- Password reset link sent by email
+- BCrypt password encryption
+- Password recovery via email
+- Password reset using a secure reset token
 
-### Blog Management
+### User Management
+
+- Create users
+- Edit user information
+- Delete users
+- Search users
+- Upload user profile images
+- Display user profile images
+- Role assignment
+- Export user information to Excel
+
+### Blog Post Management
+
 - Create blog posts
+- View blog posts
 - Edit blog posts
 - Delete blog posts
 - Search blog posts
-- View user posts
+- View posts by specific users
+- User-based post ownership
+- Users can manage only their own posts
 
-### Other Features
-- Form validation
-- MySQL database persistence
-- Excel export
-- Email service integration
+### Validation
+
+- Form validation using Bean Validation
+- Required field validation
+- Input error messages
+- Password validation during user creation
 
 ## Technologies
 
 ### Backend
+
 - Java 17
 - Spring Framework 5.3
 - Spring MVC
-- Spring Security
-- Hibernate
-- Maven
-
-### Frontend
-- JSP
-- JSTL
-- HTML
-- CSS
-- Bootstrap
-- JavaScript
+- Spring Security 5.8
+- Spring JDBC
+- Hibernate ORM
+- Hibernate Validator
 
 ### Database
-- MySQL
 
-### Email
-- JavaMail / Spring Mail
+- MySQL 8.0
 
-### Server
-- Apache Tomcat 9
+### Frontend
+
+- JSP
+- JSTL
+- HTML5
+- CSS3
+- Bootstrap
+
+### Development Tools
+
+- Eclipse
+- Apache Maven
+- Apache Tomcat
+- Git
+- GitHub
+
+### Libraries
+
+- Lombok
+- Apache POI
+- JavaMail
+- MySQL Connector/J
 
 ## Architecture
 
-The application follows a layered MVC architecture.
+The application follows a layered architecture to separate responsibilities between the presentation, business, and data access layers.
 
 ```text
 Browser
-   ↓
-Controller
-   ↓
-Service
-   ↓
-DAO
-   ↓
-Hibernate
-   ↓
-MySQL
+   │
+   ▼
+Controller Layer
+   │
+   ▼
+Service Layer
+   │
+   ▼
+DAO Layer
+   │
+   ▼
+Hibernate / JDBC
+   │
+   ▼
+MySQL Database
