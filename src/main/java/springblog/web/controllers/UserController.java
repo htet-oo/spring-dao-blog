@@ -29,102 +29,222 @@ import springblog.web.form.UserForm;
 
 @Controller
 public class UserController {
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private RoleService roleService;
-	
-	@Autowired PostDao postDao;
 
-	@RequestMapping("/users/list")
-	public ModelAndView getAllUsers(Authentication authentication, HttpSession session) {
-		System.out.println(session.getServletContext().getRealPath("/"));
-		ModelAndView mv = new ModelAndView("userListView");
-		List<UserDTO> userDtoList = this.userService.getAllUsers();
-		mv.addObject("users", userDtoList);
-		
-		var role = authentication.getAuthorities();
-		mv.addObject("role",role);
-		return mv;
-	}
+    @Autowired
+    private UserService userService;
 
-	@RequestMapping("/users/create")
-	public ModelAndView createUser() {
-		ModelAndView mv = new ModelAndView("userCreateView");
-		List<RoleDTO> roles = roleService.getAllRoles();
-		mv.addObject("saveUser", new UserForm());
-		mv.addObject("roles",roles);
-		return mv;
-	}
+    @Autowired
+    private RoleService roleService;
 
-	@RequestMapping(value = "/users/create/save", method = RequestMethod.POST)
-	public ModelAndView saveUser(@ModelAttribute("saveUser") @Valid UserForm userForm,HttpServletRequest request,
-								 BindingResult result) throws IOException {
-		ModelAndView mv = new ModelAndView();
-		if(result.hasErrors()) {
-			mv.setViewName("userCreateView");
-			return mv;
-		}
-		byte[] bytes = userForm.getImage().getBytes();
-		String path = request.getServletContext().getRealPath("/")+"WEB-INF"+File.separator+"resources"+File.separator+"img"+File.separator+userForm.getImage().getOriginalFilename();
-		System.out.println(path);
-		try {
-			FileOutputStream fos = new FileOutputStream(path);
-			fos.write(bytes);
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		userService.saveUser(userForm);
-		mv.addObject("path",path);
-		mv.setViewName("redirect:/users/list");
-		return mv;
-	}
+    @Autowired
+    private PostDao postDao;
 
-	@RequestMapping("/users/delete")
-	public ModelAndView deleteUser(@RequestParam int deleteId) {
-		ModelAndView mv = new ModelAndView();
-		userService.deleteUser(deleteId);
-		mv.setViewName("redirect:/users/list");
-		return mv;
-	}
+    @RequestMapping("/users/list")
+    public ModelAndView getAllUsers(
+            Authentication authentication,
+            HttpSession session) {
 
-	@RequestMapping("/users/search")
-	public ModelAndView searchUser(@RequestParam("keyword") String keyword) {
-		ModelAndView mv = new ModelAndView("userListView");
-		List<UserDTO> userDtoList = this.userService.searchUser(keyword);
-		mv.addObject("users", userDtoList);
-		return mv;
-	}
+        System.out.println(
+                session.getServletContext()
+                        .getRealPath("/")
+        );
 
-	@RequestMapping("/users/edit")
-	public ModelAndView editUser(@RequestParam int updateObjId) {
-		ModelAndView mv = new ModelAndView("userEditView");
-		UserDTO userDto = userService.searhUserById(updateObjId);
-		mv.addObject("editUser", new UserForm(userDto));
-		return mv;
-	}
+        ModelAndView mv =
+                new ModelAndView("userListView");
 
-	@RequestMapping(value = "/users/edit/save", method = RequestMethod.POST)
-	public ModelAndView saveEditUser(@ModelAttribute("editUser") @Valid UserForm userForm,
-									 BindingResult result) {
-		ModelAndView mv = new ModelAndView();
-		if(result.hasErrors()) {
-			mv.setViewName("userEditView");
-			return mv;
-		}
-		userService.editUser(userForm);
-		mv.setViewName("redirect:/users/list");
-		return mv;
-	}
-	
-	@RequestMapping("/excelUser")
-	public void generateExcelReport(HttpServletResponse response) throws Exception{
-		response.setContentType("application/octet-stream");
-		String headerKey = "Content-Disposition";
-		String headerValue = "attachment;filename=list.xls";
-		response.setHeader(headerKey, headerValue);
-		userService.generateExcel(response);
-	}
+        List<UserDTO> userDtoList =
+                userService.getAllUsers();
+
+        mv.addObject("users", userDtoList);
+
+        var role = authentication.getAuthorities();
+
+        mv.addObject("role", role);
+
+        return mv;
+    }
+
+    @RequestMapping("/users/create")
+    public ModelAndView createUser() {
+
+        ModelAndView mv =
+                new ModelAndView("userCreateView");
+
+        List<RoleDTO> roles =
+                roleService.getAllRoles();
+
+        mv.addObject(
+                "saveUser",
+                new UserForm()
+        );
+
+        mv.addObject("roles", roles);
+
+        return mv;
+    }
+
+    @RequestMapping(
+            value = "/users/create/save",
+            method = RequestMethod.POST)
+    public ModelAndView saveUser(
+            @ModelAttribute("saveUser")
+            @Valid UserForm userForm,
+            HttpServletRequest request,
+            BindingResult result)
+            throws IOException {
+
+        ModelAndView mv =
+                new ModelAndView();
+
+        if (result.hasErrors()) {
+
+            mv.setViewName("userCreateView");
+
+            return mv;
+        }
+
+        byte[] bytes =
+                userForm.getImage().getBytes();
+
+        String path =
+                request.getServletContext()
+                        .getRealPath("/")
+                + "WEB-INF"
+                + File.separator
+                + "resources"
+                + File.separator
+                + "img"
+                + File.separator
+                + userForm.getImage()
+                        .getOriginalFilename();
+
+        System.out.println(path);
+
+        try {
+
+            FileOutputStream fos =
+                    new FileOutputStream(path);
+
+            fos.write(bytes);
+
+            fos.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        userService.saveUser(userForm);
+
+        mv.addObject("path", path);
+
+        mv.setViewName(
+                "redirect:/users/list"
+        );
+
+        return mv;
+    }
+
+    @RequestMapping("/users/delete")
+    public ModelAndView deleteUser(
+            @RequestParam int deleteId) {
+
+        ModelAndView mv =
+                new ModelAndView();
+
+        userService.deleteUser(deleteId);
+
+        mv.setViewName(
+                "redirect:/users/list"
+        );
+
+        return mv;
+    }
+
+    @RequestMapping("/users/search")
+    public ModelAndView searchUser(
+            @RequestParam("keyword") String keyword) {
+
+        ModelAndView mv =
+                new ModelAndView("userListView");
+
+        List<UserDTO> userDtoList =
+                userService.searchUser(keyword);
+
+        mv.addObject("users", userDtoList);
+
+        return mv;
+    }
+
+    @RequestMapping("/users/edit")
+    public ModelAndView editUser(
+            @RequestParam int updateObjId) {
+
+        ModelAndView mv =
+                new ModelAndView("userEditView");
+
+        UserDTO userDto =
+                userService.searhUserById(
+                        updateObjId
+                );
+
+        mv.addObject(
+                "editUser",
+                new UserForm(userDto)
+        );
+
+        return mv;
+    }
+
+    @RequestMapping(
+            value = "/users/edit/save",
+            method = RequestMethod.POST)
+    public ModelAndView saveEditUser(
+            @ModelAttribute("editUser")
+            @Valid UserForm userForm,
+            BindingResult result) {
+
+        ModelAndView mv =
+                new ModelAndView();
+
+        if (result.hasErrors()) {
+
+            mv.setViewName(
+                    "userEditView"
+            );
+
+            return mv;
+        }
+
+        userService.editUser(userForm);
+
+        mv.setViewName(
+                "redirect:/users/list"
+        );
+
+        return mv;
+    }
+
+    @RequestMapping("/excelUser")
+    public void generateExcelReport(
+            HttpServletResponse response)
+            throws Exception {
+
+        response.setContentType(
+                "application/octet-stream"
+        );
+
+        String headerKey =
+                "Content-Disposition";
+
+        String headerValue =
+                "attachment;filename=list.xls";
+
+        response.setHeader(
+                headerKey,
+                headerValue
+        );
+
+        userService.generateExcel(response);
+    }
 }

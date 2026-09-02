@@ -75,17 +75,26 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void savePost(PostForm postForm) {
-		User user = userDao.searhUserById(postForm.getUserId());
-		User authorName = userDao.findByEmail(postForm.getEmail());
-		Post post = new Post();
-		post.setId(postForm.getId());
-		post.setDescription(postForm.getDescription());
-		post.setTitle(postForm.getTitle());
-		post.setCreated_at(new Date());
-		post.setUser(user);
-		post.setAuthor(authorName.getName());
-		postDao.savePost(post);
 
+	    User authorName = userDao.findByEmail(postForm.getEmail());
+
+	    if (authorName == null) {
+	        throw new IllegalArgumentException("Logged-in user not found: " + postForm.getEmail());
+	    }
+
+	    Post post = new Post();
+
+	    post.setDescription(postForm.getDescription());
+	    post.setTitle(postForm.getTitle());
+	    post.setCreated_at(new Date());
+
+	    // The logged-in user becomes the owner
+	    post.setUser(authorName);
+
+	    // Store the author's name
+	    post.setAuthor(authorName.getName());
+
+	    postDao.savePost(post);
 	}
 
 	@Override

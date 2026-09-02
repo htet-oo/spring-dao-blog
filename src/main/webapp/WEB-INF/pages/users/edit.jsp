@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div class="container py-5">
-		<h3>User Create</h3>
+		<h3>User Edit</h3>
 		<c:url value="/users/edit/save" var="editDb"></c:url>
 		<form:form method="POST" action="${editDb}" modelAttribute="editUser" enctype="multipart/form-data">
 			<form:hidden path="id" />

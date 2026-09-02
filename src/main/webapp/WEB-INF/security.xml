@@ -1,49 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:security="http://www.springframework.org/schema/security"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd 
-    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
-    http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
 
-	<!-- Security -->
-		
-	<security:authentication-manager>
-		<security:authentication-provider >
-			<security:user-service>
-				<security:user name="admin@gmail.com" authorities="Admin" password="$2a$10$C90YyF1rw7uYhCxvtNYpz.QiO8HaDnQXoc3wFEq2tMhi6cW6Ua0eO"/>
-			</security:user-service>		
-		</security:authentication-provider>
-		<security:authentication-provider
-			user-service-ref="myUserDetailsService">
-			<security:password-encoder
-				ref="passwordEncoder" />
-		</security:authentication-provider>
-	</security:authentication-manager>
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd
+
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+
+        http://www.springframework.org/schema/security
+        https://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!-- Security -->
+
+    <security:authentication-manager>
+
+        <!-- Hard-coded Admin -->
+        <security:authentication-provider>
+
+            <security:user-service>
+
+                <security:user
+                    name="admin@gmail.com"
+                    authorities="Admin"
+                    password="$2a$10$C90YyF1rw7uYhCxvtNYpz.QiO8HaDnQXoc3wFEq2tMhi6cW6Ua0eO" />
+
+            </security:user-service>
+
+        </security:authentication-provider>
 
 
-	<security:http>
-	    <security:intercept-url pattern="/users/**" access="hasAnyAuthority('Admin')" />
-	    <security:intercept-url pattern="/posts/**" access="hasAnyAuthority('User')" />
-	    <security:intercept-url pattern="/login/**" access="permitAll" />
-	    <security:intercept-url pattern="/**" access="permitAll" />
-	    <security:intercept-url pattern="/resources/**" access="permitAll" />
+        <!-- Database Users -->
+        <security:authentication-provider
+            user-service-ref="myUserDetailsService">
 
-	    <security:form-login login-page="/login"
-	        login-processing-url="/login" username-parameter="username"
-	        password-parameter="password"
-	        authentication-success-handler-ref="customAuthenticationSuccessHandler" />
-	
-	    <security:logout logout-url="/logout"
-	        logout-success-url="/login" invalidate-session="true" />
-	    <security:csrf disabled="true" />
+            <security:password-encoder
+                ref="passwordEncoder" />
 
-	</security:http>
+        </security:authentication-provider>
+
+    </security:authentication-manager>
+
+
+    <security:http>
+
+        <!-- Admin can manage users -->
+
+        <security:intercept-url
+            pattern="/users/**"
+            access="hasAuthority('Admin')" />
+
+
+        <!-- Both User and Admin can VIEW posts -->
+
+        <security:intercept-url
+            pattern="/posts/list"
+            access="hasAnyAuthority('User','Admin')" />
+
+        <security:intercept-url
+            pattern="/posts/userPostList"
+            access="hasAnyAuthority('User','Admin')" />
+
+        <security:intercept-url
+            pattern="/posts/search"
+            access="hasAnyAuthority('User','Admin')" />
+
+
+        <!-- Both User and Admin can CREATE posts -->
+
+        <security:intercept-url
+            pattern="/posts/create"
+            access="hasAnyAuthority('User','Admin')" />
+
+        <security:intercept-url
+            pattern="/posts/create/save"
+            access="hasAnyAuthority('User','Admin')" />
+
+
+        <!-- Both User and Admin can EDIT posts -->
+
+        <security:intercept-url
+            pattern="/posts/edit"
+            access="hasAnyAuthority('User','Admin')" />
+
+        <security:intercept-url
+            pattern="/posts/edit/save"
+            access="hasAnyAuthority('User','Admin')" />
+
+
+        <!-- Both User and Admin can DELETE posts -->
+
+        <security:intercept-url
+            pattern="/posts/delete"
+            access="hasAnyAuthority('User','Admin')" />
+
+
+        <!-- Login -->
+
+        <security:intercept-url
+            pattern="/login/**"
+            access="permitAll" />
+
+        <security:intercept-url
+            pattern="/resources/**"
+            access="permitAll" />
+
+        <security:intercept-url
+            pattern="/**"
+            access="permitAll" />
+
+
+        <!-- Form Login -->
+
+        <security:form-login
+            login-page="/login"
+            login-processing-url="/login"
+            username-parameter="username"
+            password-parameter="password"
+            authentication-success-handler-ref="customAuthenticationSuccessHandler" />
+
+
+        <!-- Logout -->
+
+        <security:logout
+            logout-url="/logout"
+            logout-success-url="/login"
+            invalidate-session="true" />
+
+
+        <!-- CSRF -->
+
+        <security:csrf disabled="true" />
+
+    </security:http>
 
 </beans>

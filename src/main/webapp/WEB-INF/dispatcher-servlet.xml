@@ -20,7 +20,7 @@
 	<!-- MVC, Resource, Property Configuration -->
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/resources/**"
-		location="/WEB-INF/resources/" />	
+		location="/resources/" />	
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

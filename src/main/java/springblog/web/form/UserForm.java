@@ -17,31 +17,30 @@ import springblog.bl.dto.UserDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserForm {
-	
-	
-	private int id;
 
-	@NotBlank(message = "Please Enter Name")
-	private String name;
+    private int id;
 
-	@NotBlank(message = "Please Enter Email")
-	private String email;
+    @NotBlank(message = "Please Enter Name")
+    private String name;
 
-	@NotBlank(message = "Please Enter Password")
-	private String password;
-	
-	private int roleId;
-	
-	private List<String> roles;
-	
-	private MultipartFile image;
+    @NotBlank(message = "Please Enter Email")
+    private String email;
 
-	public UserForm(UserDTO userDto) {
-		this.id = userDto.getId();
-		this.name = userDto.getName();
-		this.email = userDto.getEmail();
-		this.password = userDto.getPassword();
-		this.roles=userDto.getRoles().stream().map(role -> role.getAuthority()).toList();
-	}
+    private String password;
 
+    private int roleId;
+
+    private List<String> roles;
+
+    private MultipartFile image;
+
+    public UserForm(UserDTO userDto) {
+        this.id = userDto.getId();
+        this.name = userDto.getName();
+        this.email = userDto.getEmail();
+        this.roles = userDto.getRoles()
+                .stream()
+                .map(role -> role.getAuthority())
+                .toList();
+    }
 }

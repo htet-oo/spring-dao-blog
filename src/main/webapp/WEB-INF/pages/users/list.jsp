@@ -36,7 +36,8 @@
 				<c:forEach items="${users}" var="user">
 					<tr>
 						<td>
-							<img alt="user_imge" src="${pageContext.request.contextPath}/resources/img/${user.imageName}">
+							<img alt="user_imge" src="${pageContext.request.contextPath}/resources/img/${user.imageName}"
+							style="width: 80px; height: 80px; object-fit: cover;">
 						</td>
 						<td>${user.name}</td>
 						<td>${user.email}</td>
