@@ -264,7 +264,7 @@ The images can then be displayed in the user list.
 
 ### Create Post
 
-![Create Post](GitPhoto/UserPostCreateView.png)
+![Create Post](GitPhoto/UserPostCreatView.png)
 
 ### Admin - Create User
 
