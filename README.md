@@ -140,23 +140,6 @@ Examples:
 - `Post`
 - `Role`
 
-
-## Database
-
-The application uses MySQL for persistent data storage.
-
-Main entities and relationships:
-
-User
- |
- ├── Role
- |
- └── Post
-
-A user can have roles and can create multiple blog posts.
-
-The `Post` entity has a relationship with the `User` entity through `user_id`.
-
 ## Security
 
 Spring Security is used to protect application resources and implement role-based access control.
@@ -269,43 +252,43 @@ The images can then be displayed in the user list.
 
 ### Login
 
-![Login](screenshots/Login.png)
+![Login](GitPhoto/Login.png)
 
 ### User List
 
-![User List](screenshots/UserList.png)
+![User List](GitPhoto/UserList.png)
 
 ### User Home
 
-![User Home](screenshots/UserHomeView.png)
+![User Home](GitPhoto/UserHomeView.png)
 
 ### Create Post
 
-![Create Post](screenshots/UserPostCreateView.png)
+![Create Post](GitPhoto/UserPostCreateView.png)
 
 ### Admin - Create User
 
-![Admin Create User](screenshots/AdminUserCreate.png)
+![Admin Create User](GitPhoto/AdminUserCreate.png)
 
 ### Admin - View Other User's Posts
 
-![Admin Viewing Other User's Posts](screenshots/AdminViewingOtherPost.png)
+![Admin Viewing Other User's Posts](GitPhoto/AdminViewingOtherPost.png)
 
 ### Search User
 
-![Search User](screenshots/SearchUser.png)
+![Search User](GitPhoto/SearchUser.png)
 
 ### Export User List to Excel
 
-![Export User List to Excel](screenshots/ExportingUserListExcel.png)
+![Export User List to Excel](GitPhoto/ExportingUserListExcel.png)
 
 ### Password Reset Email
 
-![Password Reset Email](screenshots/PasswordResetLinkEmail.png)
+![Password Reset Email](GitPhoto/PasswordResetLinkEmail.png)
 
 ### Password Reset
 
-![Password Reset](screenshots/PasswordResetViaEmail.png)
+![Password Reset](GitPhoto/PasswordResetViaEmail.png)
 
 ## What I Learned
 
